@@ -16,14 +16,19 @@ int main(int argc, char* argv[]) {
   char direction;
 
   while (fscanf(moves, "%c%d\n", &direction, &toDial) != EOF) {
-    if (direction == 'R') dial += toDial;
-    else dial -= toDial;
+    for (int i=1; i<=toDial; ++i) {
+      if (direction == 'R') dial = (dial - 1 + 100) % 100;
+      else dial = (dial + 1) % 100;
 
-    while (dial < 0) dial += 100;
-    while (dial >= 100) dial -= 100;
+      if (dial == 0) numZeros++;
+    }
 
-    printf("Dial is: %d after a change of %c%d\n", dial, direction, toDial);
-    if (dial == 0) numZeros++;
+    // only count a zero if a click lands on it during or at the end of a turn
+    // a click lands on it during a turn if:
+    //   we have to reorient a number
+    //   we need to subtract one if we started at 0 and then underflowed
+
+    // printf("Dial is: %d after a change of %c%d\n", dial, direction, toDial);
   }
 
   printf("%d\n", numZeros);
